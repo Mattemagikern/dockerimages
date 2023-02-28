@@ -17,7 +17,7 @@ RUN apt-get install -y git cmake ninja-build gperf \
   ccache dfu-util device-tree-compiler wget \
   python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file \
   make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1 \
-  sudo locales
+  sudo locales screen
 
 # Initialise system locale
 RUN locale-gen en_US.UTF-8
@@ -45,7 +45,7 @@ RUN dpkg -i nrf-command-line-tools_10.18.1_amd64.deb
 RUN rm nrf-command-line-tools_10.18.1_amd64.deb 
 
 RUN sudo apt-get -y install libxcb-render0 libxcb-render-util0 \
-	libxcb-shape0 libxcb-icccm4 libxcb-keysyms1 libxcb-image0 libxkbcommon-x11-0 udev
+	libxcb-shape0 libxcb-icccm4 libxcb-keysyms1 libxcb-image0 libxkbcommon-x11-0 udev xxd git
 COPY JLink_Linux_V782e_x86_64.tgz .
 RUN mkdir /opt/SEGGER/ 
 RUN tar -xvf JLink_Linux_V782e_x86_64.tgz -C /opt/SEGGER/
@@ -60,3 +60,5 @@ ENV ZEPHYR_TOOLCHAIN_VARIANT=zephyr
 ENV ZEPHYR_SDK_INSTALL_DIR=/opt/toolchains/zephyr-sdk-0.15.2
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/JLink/
 ENV PATH=$PATH:/opt/JLink/
+RUN apt-get install bsdmainutils
+RUN git config --global --add safe.directory '*'
