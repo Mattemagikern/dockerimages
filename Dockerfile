@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 # Set default shell during Docker image build to bash
 SHELL ["/bin/bash", "-c"]
@@ -40,25 +40,19 @@ RUN rm zephyr-sdk-0.15.2_linux-x86_64.tar.gz
 
 # Set the locale
 
-RUN wget https://nsscprodmedia.blob.core.windows.net/prod/software-and-other-downloads/desktop-software/nrf-command-line-tools/sw/versions-10-x-x/10-18-1/nrf-command-line-tools_10.18.1_amd64.deb 
-RUN dpkg -i nrf-command-line-tools_10.18.1_amd64.deb 
-RUN rm nrf-command-line-tools_10.18.1_amd64.deb 
+COPY ./nrf-command-line-tools_10.21.0_amd64.deb /nrf-command-line-tools_10.21.0_amd64.deb
+RUN apt install -y ./nrf-command-line-tools_10.21.0_amd64.deb 
+RUN apt install -y /opt/nrf-command-line-tools/share/JLink_Linux_V780c_x86_64.deb --fix-broken
+RUN rm nrf-command-line-tools_10.21.0_amd64.deb 
 
 RUN sudo apt-get -y install libxcb-render0 libxcb-render-util0 \
 	libxcb-shape0 libxcb-icccm4 libxcb-keysyms1 libxcb-image0 libxkbcommon-x11-0 udev xxd git
-COPY JLink_Linux_V782e_x86_64.tgz .
-RUN mkdir /opt/SEGGER/ 
-RUN tar -xvf JLink_Linux_V782e_x86_64.tgz -C /opt/SEGGER/
-run ln -s /opt/SEGGER/JLink_Linux_V782e_x86_64 /opt/JLink
-RUN rm JLink_Linux_V782e_x86_64.tgz
-RUN echo "/opt/JLink/" > /etc/ld.so.conf.d/JLink.conf
 
 COPY ./nrfutil /bin/nrfutil
-RUN pip3 install robotframework==5.0.1
 
 ENV ZEPHYR_TOOLCHAIN_VARIANT=zephyr
 ENV ZEPHYR_SDK_INSTALL_DIR=/opt/toolchains/zephyr-sdk-0.15.2
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/JLink/
 ENV PATH=$PATH:/opt/JLink/
-RUN apt-get install bsdmainutils
+RUN apt-get install -y bsdmainutils srecord
 RUN git config --global --add safe.directory '*'
