@@ -17,7 +17,7 @@ RUN apt-get install -y git cmake ninja-build gperf \
   ccache dfu-util device-tree-compiler wget \
   python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file \
   make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1 \
-  sudo locales screen
+  sudo locales screen jq
 
 # Initialise system locale
 RUN locale-gen en_US.UTF-8
@@ -49,6 +49,8 @@ RUN sudo apt-get -y install libxcb-render0 libxcb-render-util0 \
 	libxcb-shape0 libxcb-icccm4 libxcb-keysyms1 libxcb-image0 libxkbcommon-x11-0 udev xxd git
 
 COPY ./nrfutil /bin/nrfutil
+
+RUN nrfutil install nrf5sdk-tools
 
 ENV ZEPHYR_TOOLCHAIN_VARIANT=zephyr
 ENV ZEPHYR_SDK_INSTALL_DIR=/opt/toolchains/zephyr-sdk-0.15.2
