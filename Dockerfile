@@ -1,8 +1,9 @@
-FROM ubuntu:22.04
+FROM zephyrprojectrtos/zephyr-build:v0.24.13
 
 # Set default shell during Docker image build to bash
 SHELL ["/bin/bash", "-c"]
 
+USER root
 # Set non-interactive frontend for apt-get to skip any user confirmations
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -10,8 +11,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get -y update && apt-get -y upgrade
 RUN apt-get -y install wget sudo
 
-RUN wget https://apt.kitware.com/kitware-archive.sh && sudo bash kitware-archive.sh
-RUN rm kitware-archive.sh
+#RUN wget https://apt.kitware.com/kitware-archive.sh && sudo bash kitware-archive.sh
+#RUN rm kitware-archive.sh
 
 RUN apt-get install -y git cmake ninja-build gperf \
   ccache dfu-util device-tree-compiler wget \
@@ -46,7 +47,11 @@ RUN apt install -y /opt/nrf-command-line-tools/share/JLink_Linux_V780c_x86_64.de
 RUN rm nrf-command-line-tools_10.21.0_amd64.deb 
 
 RUN sudo apt-get -y install libxcb-render0 libxcb-render-util0 \
-	libxcb-shape0 libxcb-icccm4 libxcb-keysyms1 libxcb-image0 libxkbcommon-x11-0 udev xxd git
+	libxcb-shape0 libxcb-icccm4 libxcb-keysyms1 libxcb-image0 libxkbcommon-x11-0 udev xxd git libreadline-dev \
+	libsqlcipher-dev
+
+COPY ./requirements.txt /requirements.txt
+RUN pip3 install -r /requirements.txt
 
 COPY ./nrfutil /bin/nrfutil
 

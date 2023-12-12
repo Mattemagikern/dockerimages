@@ -1,0 +1,16 @@
+click
+cbor>=1.0.0
+networkx==2.8.6
+cffi==1.15.1
+cryptography==3.4.7
+cstruct==1.8
+intelhex==2.3.0
+pycparser==2.21
+pysqlcipher3==1.2.0
+jsonschema>=4.4.0
+cbor2>=5.4.3
+ecdsa>=0.18.0
+qrcode==7.4.2
+bitarray==2.6.0
+python_stdnum==1.18
+wget>=3.2
